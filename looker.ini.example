@@ -1,0 +1,5 @@
+[Looker]
+base_url = https://yourcompany.looker.com:19999
+client_id = your_api3_client_id
+client_secret = your_api3_client_secret
+verify_ssl = true
