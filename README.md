@@ -4,9 +4,11 @@ Tooling to temporarily move a set of Looker dashboards/looks into a locked-down,
 
 ## What it does
 
-1. **Snapshot** — records the current folder each target dashboard/look lives in.
-2. **Isolate** — creates a single new folder, breaks its permission inheritance, downgrades every access entry on it to view-only (so nobody can edit the content while it's isolated), and moves all the target dashboards/looks into it.
-3. **Restore** — moves everything back to its original folder using the snapshot, then verifies the isolation folder is empty and deletes it.
+1. **Snapshot** — records the current folder each target dashboard/look lives in, and writes it to `content_snapshot.json`.
+2. **Isolate** — creates a single new folder, breaks its permission inheritance, downgrades every access entry on it to view-only (so nobody can edit the content while it's isolated), moves all the target dashboards/looks into it, and writes the new folder's ID to `isolation_state.json`.
+3. **Restore** — reads both JSON files back from disk, moves everything back to its original folder, then verifies the isolation folder is empty and deletes it.
+
+Each phase reads its inputs from those JSON files rather than from variables left over in memory, so Phase 3 can be run in a completely separate session — a different day, a different machine, even a different person — as long as `content_snapshot.json` and `isolation_state.json` are kept handy in between.
 
 The permission downgrade step handles a real Looker quirk: Looker refuses to set a folder to view-only for a group/user that already has edit access on the folder's parent. When that happens, the notebook automatically finds the blocking parent, temporarily downgrades it, applies the change, and restores the parent back to normal — a snapshot of anything it touches is written to `permission_snapshots/` first, so nothing is ever changed without a recorded way back.
 
