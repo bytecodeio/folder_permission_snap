@@ -1,0 +1,17 @@
+# Contains a live Looker API client_id/client_secret in plaintext — never commit.
+looker.ini
+
+# Runtime state written by the notebook during a real run (actual dashboard/folder IDs) —
+# specific to whoever ran it, not something to share in the repo.
+content_snapshot.json
+isolation_state.json
+permission_snapshots/
+
+# Python build artifacts
+__pycache__/
+*.pyc
+
+# Virtual environments, in case one gets created in this folder
+.venv/
+venv/
+env/
